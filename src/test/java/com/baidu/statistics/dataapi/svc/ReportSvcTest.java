@@ -1,5 +1,6 @@
 package com.baidu.statistics.dataapi.svc;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -7,6 +8,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.baidu.httpclient.FileResponseHandler;
+import com.baidu.httpclient.HttpClientUtils;
+import com.baidu.httpclient.JsonArrayResponseHandler;
 import com.baidu.statistics.config.Config;
 import com.baidu.statistics.config.ConfigFactory;
 import com.baidu.statistics.dataapi.core.HolmesResponse;
@@ -28,6 +33,26 @@ public class ReportSvcTest extends BaseApiTest {
 	public void testGetStatus() throws Exception {
 		GetStatusResponse retData = getStatus();
 		Assert.assertNotNull(retData);
+	}
+	
+	@Test
+	public void testGetStatusAndDownloadResult() throws Exception {
+		GetStatusResponse retData = getStatus();
+		Assert.assertNotNull(retData);
+		
+		String url = retData.getResult().getResult_url();
+		String filename = retData.getResult().getResult_id() + ".json"; 
+		File destFile = new File("./tmp/" + filename);
+		HttpClientUtils.post(url, new FileResponseHandler(destFile));
+	}
+	
+	@Test
+	public void testGetStatusAndResult2JsonArray() throws Exception {
+		GetStatusResponse retData = getStatus();
+		Assert.assertNotNull(retData);
+		String url = retData.getResult().getResult_url();
+		JSONArray retJSON = (JSONArray) HttpClientUtils.post(url, new JsonArrayResponseHandler());
+		System.out.println(retJSON);
 	}
 
 	@Test

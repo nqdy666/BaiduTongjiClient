@@ -6,6 +6,11 @@ import com.baidu.statistics.dataapi.core.ParameterType;
 
 public class QueryParameter extends ParameterType {
 	/**
+	 * 受访页面报告
+	 */
+	public final static int REPROTID_PAGEVIEW = 1;
+	
+	/**
 	 * 查询报告的 id （必填）
 	 * 取值范围：1：受访页面报告
 	 */
@@ -36,7 +41,7 @@ public class QueryParameter extends ParameterType {
 	private List<String> dimensions;
 	/**
 	 * 查询的指标（必填）
-	 * 取值范围：pageid
+	 * 取值范围：
 	 * pageviews 浏览量（ PV）
 	 * visitors 访客数（ UV）
 	 * ips IP 数

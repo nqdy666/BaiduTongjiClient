@@ -18,10 +18,16 @@ public class StatisticConstant {
 	 */
 	public static final String ACCOUNT_TYPE_GELUNBU = "4";
 	
+	/**
+	 * 系统版本
+	 */
 	public static final String OS_VERSION_ANDROID = "Android";
 	public static final String OS_VERSION_IOS = "IOS";
 	public static final String OS_VERSION_WINDOWS = "Windows";
 	
+	/**
+	 *  设备类型
+	 */
 	public static final String DEVICE_TYPE_CELLPHONE = "cellphone"; //
 	public static final String DEVICE_TYPE_PAD = "pad";
 	public static final String DEVICE_TYPE_PC = "pc";

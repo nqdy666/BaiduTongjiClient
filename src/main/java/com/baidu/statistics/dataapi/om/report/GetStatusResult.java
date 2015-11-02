@@ -26,7 +26,7 @@ public class GetStatusResult {
 	/**
 	 * 当状态为已生成、可下载的时候，下载报告结果的 URL 地址
 	 */
-	private String result_rul;
+	private String result_url;
 	
 	public String getResult_id() {
 		return result_id;
@@ -46,10 +46,10 @@ public class GetStatusResult {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	public String getResult_rul() {
-		return result_rul;
+	public String getResult_url() {
+		return result_url;
 	}
-	public void setResult_rul(String result_rul) {
-		this.result_rul = result_rul;
+	public void setResult_url(String result_url) {
+		this.result_url = result_url;
 	}
 }

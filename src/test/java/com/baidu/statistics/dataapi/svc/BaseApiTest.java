@@ -64,11 +64,11 @@ public class BaseApiTest {
 			return null;
 		}
 		QueryParameter queryParam = new QueryParameter();
-		queryParam.setReportid(1);
-		queryParam.setMetrics(Arrays.asList("pageviews", "visitors"));
+		queryParam.setReportid(QueryParameter.REPROTID_PAGEVIEW);
+		queryParam.setMetrics(Arrays.asList("pageviews", "visitors", "ips", "entrances", "outwards", "exits", "stayTime", "exitRate"));
 		queryParam.setDimensions(Arrays.asList("pageid"));
-		queryParam.setStart_time("20130801000000");
-		queryParam.setEnd_time("20130830235959");
+		queryParam.setStart_time("20151004000000");
+		queryParam.setEnd_time("20151101235959");
 		queryParam.setFilters(new ArrayList<String>());
 		queryParam.setStart_index(0);
 		queryParam.setMax_results(10);
@@ -92,8 +92,16 @@ public class BaseApiTest {
 	
 	public GetStatusResponse getStatus() throws Exception {
 		HolmesResponse<QueryResponse> queryResponse = this.query();
-		if (queryResponse.getBody() == null) {
+		if (queryResponse == null || queryResponse.getBody() == null) {
 			return null;
+		}
+		/**
+		 * 由于产生报告需要一定的时间，我们采用异步的方式对报告进行处理。您首先需要通过 query()，
+		 * 然后可以调用 getstatus()方法查询报告生成状态
+		 */
+		for (int i = 0; i < 6; i++) {
+			System.out.println("[notice] sleep, wait for generating result");
+			Thread.sleep(5 * 1000);
 		}
 		HolmesResponse<GetStatusResponse> response = reportSvc.getStatus(ucid, st, 
 				new GetStatusParameter(queryResponse.getBody().getQuery().getResult_id()));
@@ -103,14 +111,6 @@ public class BaseApiTest {
 			return null;
 		}
 	
-		/**
-		 * 由于产生报告需要一定的时间，我们采用异步的方式对报告进行处理。您首先需要通过 query()，
-		 * 然后可以调用 getstatus()方法查询报告生成状态
-		 */
-		for (int i = 0; i < 5; i++) {
-			Thread.sleep(1 * 1000);
-		}
-		
 		Integer status = retData.getResult().getStatus();
 		if (status == null || status == GetStatusResult.STATUS_INVALID ) {
 			System.out.println("status invalid");

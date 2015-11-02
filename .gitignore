@@ -1,5 +1,6 @@
 .settings
 logs
+tmp
 target
 .classpath
 .project
