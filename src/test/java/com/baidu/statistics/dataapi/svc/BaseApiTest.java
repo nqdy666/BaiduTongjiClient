@@ -1,15 +1,13 @@
-package com.apexsoft.baidutongji;
+package com.baidu.statistics.dataapi.svc;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.apache.commons.lang.StringUtils;
+import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.BeforeClass;
 
-import com.alibaba.fastjson.JSON;
-import com.baidu.statistics.config.Config;
-import com.baidu.statistics.config.ConfigFactory;
 import com.baidu.statistics.dataapi.core.HolmesResponse;
 import com.baidu.statistics.dataapi.core.ResHeader;
 import com.baidu.statistics.dataapi.om.profile.GetsitesResponse;
@@ -18,12 +16,38 @@ import com.baidu.statistics.dataapi.om.report.GetStatusResponse;
 import com.baidu.statistics.dataapi.om.report.GetStatusResult;
 import com.baidu.statistics.dataapi.om.report.QueryParameter;
 import com.baidu.statistics.dataapi.om.report.QueryResponse;
-import com.baidu.statistics.dataapi.om.report.QueryTransParameter;
-import com.baidu.statistics.dataapi.om.report.QueryTransResponse;
+import com.baidu.statistics.login.om.DoLoginResponse;
+import com.baidu.statistics.login.svc.BaseLoginTest;
 
-public class ReprotSvcTest extends BaseApiTest {
+public class BaseApiTest {
 
-	private GetsitesResponse getSites() throws Exception {
+	protected static Integer ucid;
+	protected static String st;
+	
+	private static BaseLoginTest login;
+	
+	protected static ProfileSvc profileSvc;
+	protected static ReportSvc reportSvc;
+	
+	@BeforeClass
+	public static void login() throws Exception {
+		login = new BaseLoginTest();
+		profileSvc = new ProfileSvc();
+		reportSvc = new ReportSvc();
+		
+		DoLoginResponse retData = login.doLogin();
+		Assert.assertNotNull(retData);
+		ucid = retData.getUcid();
+		st = retData.getSt();
+	}
+	
+	@AfterClass
+	public static void logout() throws Exception {
+		boolean ret = login.doLogout(ucid, st);
+		Assert.assertSame(ret, true);
+	}
+	
+	public GetsitesResponse getSites() throws Exception {
 		HolmesResponse<GetsitesResponse> sitesInfo = profileSvc.getSites(ucid, st);
 		GetsitesResponse sites = sitesInfo.getBody();
 		if (sites == null || sites.getSites().size() <= 0) {
@@ -78,6 +102,15 @@ public class ReprotSvcTest extends BaseApiTest {
 			System.out.println("getStatus failed");
 			return null;
 		}
+	
+		/**
+		 * 由于产生报告需要一定的时间，我们采用异步的方式对报告进行处理。您首先需要通过 query()，
+		 * 然后可以调用 getstatus()方法查询报告生成状态
+		 */
+		for (int i = 0; i < 5; i++) {
+			Thread.sleep(1 * 1000);
+		}
+		
 		Integer status = retData.getResult().getStatus();
 		if (status == null || status == GetStatusResult.STATUS_INVALID ) {
 			System.out.println("status invalid");
@@ -95,45 +128,5 @@ public class ReprotSvcTest extends BaseApiTest {
 			System.out.println("unkown status");
 			return null;
 		}
-	}
-	
-	@Test
-	public void queryTest() throws Exception {
-		HolmesResponse<QueryResponse> response = this.query();
-		Assert.assertNotNull(response);
-	}
-	
-	@Test
-	public void getSitesTest() throws Exception {
-		GetStatusResponse retData = getStatus();
-		Assert.assertNotNull(retData);
-	}
-	
-	@Test
-	public void queryTrans() throws Exception {
-		GetsitesResponse sitesResponse = getSites();
-		if (sitesResponse == null) {
-			return;
-		}
-		Integer siteid = sitesResponse.getSites().get(0).getSiteid();
-		
-		QueryTransParameter param = new QueryTransParameter();
-		param.setMetrics(Arrays.asList("transformNum"));
-		param.setDimensions(Arrays.asList("targetid"));
-		param.setStart_time("20130801000000");
-		param.setEnd_time("20130830235959");
-		param.setFilters(new ArrayList<String>());
-		param.setStart_index(0);
-		param.setMax_results(10);
-		param.setSort(Arrays.asList("transformNum desc"));
-		param.setSiteid(siteid);
-		Config config = new ConfigFactory().getConfig();
-		if ("name".equals(config.getString(Config.K_QUERY_TRANS_TYPE))) {
-			param.setName(config.getString(Config.K_TRANS_NAME));
-		} else if ("url".equals(config.getString(Config.K_QUERY_TRANS_TYPE))) {
-			param.setUrl(config.getString(Config.K_TRANS_URL));
-		}
-		HolmesResponse<QueryTransResponse> response = reportSvc.queryTrans(ucid, st, param);
-		System.out.println(JSON.toJSONString(response));
 	}
 }

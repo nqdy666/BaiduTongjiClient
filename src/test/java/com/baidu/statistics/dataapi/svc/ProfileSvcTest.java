@@ -1,4 +1,6 @@
-package com.apexsoft.baidutongji;
+package com.baidu.statistics.dataapi.svc;
+
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -11,25 +13,15 @@ import com.baidu.statistics.dataapi.om.profile.GetTransInfoResponse;
 import com.baidu.statistics.dataapi.om.profile.GetsitesResponse;
 
 public class ProfileSvcTest extends BaseApiTest {
-	
-	public GetsitesResponse getSites() throws Exception {
-		HolmesResponse<GetsitesResponse> sitesInfo = profileSvc.getSites(ucid, st);
-		GetsitesResponse sites = sitesInfo.getBody();
-		if (sites == null || sites.getSites().size() <= 0) {
-			System.out.println("getSites failed!");
-			return null;
-		}
-		System.out.println("getSites successfully!");
-		return sites;
-	}
-	
+
 	@Test
-	public void getSitesTest() throws Exception {
-		getSites();
+	public void testGetSites() throws Exception {
+		GetsitesResponse ret = getSites();
+		assertNotNull(ret);
 	}
-	
+
 	@Test
-	public void getTransInfo() throws Exception {
+	public void testGetTransInfo() throws Exception {
 		GetTransInfoParameter param = new GetTransInfoParameter();
 		Config config = new ConfigFactory().getConfig();
 		if ("name".equals(config.getString(Config.K_QUERY_TRANS_TYPE))) {
@@ -39,5 +31,7 @@ public class ProfileSvcTest extends BaseApiTest {
 		}
 		HolmesResponse<GetTransInfoResponse> transInfo = profileSvc.getTransInfo(ucid, st, param);
 		System.out.println(JSON.toJSONString(transInfo));
+		assertNotNull(transInfo);
 	}
+
 }

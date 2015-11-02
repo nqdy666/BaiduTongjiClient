@@ -1,6 +1,4 @@
-package com.apexsoft.baidutongji;
-
-import org.junit.Test;
+package com.baidu.statistics.login.svc;
 
 import com.alibaba.fastjson.JSON;
 import com.baidu.statistics.common.StatisticConstant;
@@ -11,9 +9,8 @@ import com.baidu.statistics.login.om.DoLogoutRequest;
 import com.baidu.statistics.login.om.DoLogoutResponse;
 import com.baidu.statistics.login.om.PreLoginRequest;
 import com.baidu.statistics.login.om.PreLoginResponse;
-import com.baidu.statistics.login.svc.LoginSvc;
 
-public class LoginConnectionTest {
+public class BaseLoginTest {
 	
 	private LoginSvc loginSvc = new LoginSvc();
 	
@@ -71,29 +68,5 @@ public class LoginConnectionTest {
 		}
 		System.out.println("[notice] doLogout successfully!");
 		return true;
-	}
-	
-	@Test
-	public void doPreLogin() throws Exception {
-		preLogin();
-	}
-	
-	@Test
-	public void doLoginTest() throws Exception {
-		if (preLogin()) {
-			doLogin();
-		}
-	}
-	
-	@Test
-	public void doLogoutTest() throws Exception {
-		if (!preLogin()) {
-			return;
-		}
-		DoLoginResponse loginRetData = doLogin();
-		if (loginRetData == null) {
-			return;
-		}
-		doLogout(loginRetData.getUcid(), loginRetData.getSt());
 	}
 }
