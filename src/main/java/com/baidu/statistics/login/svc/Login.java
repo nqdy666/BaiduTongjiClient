@@ -12,7 +12,7 @@ import com.baidu.statistics.login.om.DoLogoutResponse;
 import com.baidu.statistics.login.om.PreLoginRequest;
 import com.baidu.statistics.login.om.PreLoginResponse;
 
-public class LoginSvc {
+public class Login {
 	
 	/**
 	 * 预登入

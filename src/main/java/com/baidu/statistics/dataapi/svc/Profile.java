@@ -10,7 +10,11 @@ import com.baidu.statistics.dataapi.om.profile.GetTransInfoRequest;
 import com.baidu.statistics.dataapi.om.profile.GetTransInfoResponse;
 import com.baidu.statistics.dataapi.om.profile.GetsitesResponse;
 
-public class ProfileSvc {
+public class Profile extends Base {
+
+	public Profile(Integer ucid, String st) {
+		super(ucid, st);
+	}
 
 	/**
 	 * getsites方法返回账号下管理的站点、子目录信息
@@ -19,7 +23,7 @@ public class ProfileSvc {
 	 * @return
 	 * @throws Exception
 	 */
-	public HolmesResponse<GetsitesResponse> getSites(Integer ucid, String st) throws Exception {
+	public HolmesResponse<GetsitesResponse> getSites() throws Exception {
 		DataApiConnection conn = new DataApiConnection(ucid);
 		AuthHeader header = new AuthHeader(st);
 		GetSitesRequest body = new GetSitesRequest();
@@ -27,9 +31,9 @@ public class ProfileSvc {
 		HolmesResponse<GetsitesResponse> holmesRs = conn.post(holmesRq, GetsitesResponse.class);
 		return holmesRs;
 	}
-	
-	public HolmesResponse<GetTransInfoResponse> getTransInfo(Integer ucid, String st, 
-			GetTransInfoParameter param) throws Exception {
+
+	public HolmesResponse<GetTransInfoResponse> getTransInfo(GetTransInfoParameter param)
+			throws Exception {
 		DataApiConnection conn = new DataApiConnection(ucid);
 		AuthHeader header = new AuthHeader(st);
 		GetTransInfoRequest body = new GetTransInfoRequest(param);

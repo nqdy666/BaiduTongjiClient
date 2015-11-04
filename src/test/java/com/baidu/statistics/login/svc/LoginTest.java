@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import com.baidu.statistics.login.om.DoLoginResponse;
 
-public class LoginSvcTest {
+public class LoginTest {
 
 	private BaseLoginTest login;
 	

@@ -12,11 +12,11 @@ import com.baidu.statistics.login.om.PreLoginResponse;
 
 public class BaseLoginTest {
 	
-	private LoginSvc loginSvc = new LoginSvc();
+	private Login login = new Login();
 	
 	public boolean preLogin() throws Exception {
 		PreLoginRequest request = new PreLoginRequest(StatisticConstant.OS_VERSION_WINDOWS, StatisticConstant.DEVICE_TYPE_PC, "1.0");
-		LoginResponse<PreLoginResponse> response = loginSvc.preLogin(request);
+		LoginResponse<PreLoginResponse> response = login.preLogin(request);
 		if (LoginReturnCode.OK != response.getReturnCode()) {
 			System.out.println("[error] preLogin unsuccessfully with return code: " + response.getReturnCode());
 			return false;
@@ -35,7 +35,7 @@ public class BaseLoginTest {
 	}
 	
 	public DoLoginResponse doLogin() throws Exception {
-		LoginResponse<DoLoginResponse> response = loginSvc.doLogin();
+		LoginResponse<DoLoginResponse> response = login.doLogin();
 		if (LoginReturnCode.OK != response.getReturnCode()) {
 			System.out.println("[error] doLogin unsuccessfully with return code: " + response.getReturnCode());
 			return null;
@@ -56,7 +56,7 @@ public class BaseLoginTest {
 	
 	public boolean doLogout(Integer ucid, String st) throws Exception {
 		DoLogoutRequest request = new DoLogoutRequest(ucid, st);
-		LoginResponse<DoLogoutResponse> response = loginSvc.doLogout(request);
+		LoginResponse<DoLogoutResponse> response = login.doLogout(request);
 		if (LoginReturnCode.OK != response.getReturnCode()) {
 			System.out.println("[error] doLogout unsuccessfully with return code: " + response.getReturnCode());
 			return false;

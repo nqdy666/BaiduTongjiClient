@@ -12,7 +12,7 @@ import com.baidu.statistics.dataapi.om.profile.GetTransInfoParameter;
 import com.baidu.statistics.dataapi.om.profile.GetTransInfoResponse;
 import com.baidu.statistics.dataapi.om.profile.GetsitesResponse;
 
-public class ProfileSvcTest extends BaseApiTest {
+public class ProfileTest extends BaseApiTest {
 
 	@Test
 	public void testGetSites() throws Exception {
@@ -29,7 +29,7 @@ public class ProfileSvcTest extends BaseApiTest {
 		} else if ("url".equals(config.getString(Config.K_QUERY_TRANS_TYPE))) {
 			param.setUrl(config.getString(Config.K_TRANS_URL));
 		}
-		HolmesResponse<GetTransInfoResponse> transInfo = profileSvc.getTransInfo(ucid, st, param);
+		HolmesResponse<GetTransInfoResponse> transInfo = profile.getTransInfo(param);
 		System.out.println(JSON.toJSONString(transInfo));
 		assertNotNull(transInfo);
 	}

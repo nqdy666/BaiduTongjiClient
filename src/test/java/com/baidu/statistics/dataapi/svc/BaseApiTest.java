@@ -21,24 +21,25 @@ import com.baidu.statistics.login.svc.BaseLoginTest;
 
 public class BaseApiTest {
 
-	protected static Integer ucid;
-	protected static String st;
+	private static Integer ucid;
+	private static String st;
 	
 	private static BaseLoginTest login;
 	
-	protected static ProfileSvc profileSvc;
-	protected static ReportSvc reportSvc;
+	protected static Profile profile;
+	protected static Report report;
 	
 	@BeforeClass
 	public static void login() throws Exception {
 		login = new BaseLoginTest();
-		profileSvc = new ProfileSvc();
-		reportSvc = new ReportSvc();
 		
 		DoLoginResponse retData = login.doLogin();
 		Assert.assertNotNull(retData);
+		
 		ucid = retData.getUcid();
 		st = retData.getSt();
+		profile = new Profile(ucid, st);
+		report = new Report(ucid, st);
 	}
 	
 	@AfterClass
@@ -48,7 +49,7 @@ public class BaseApiTest {
 	}
 	
 	public GetsitesResponse getSites() throws Exception {
-		HolmesResponse<GetsitesResponse> sitesInfo = profileSvc.getSites(ucid, st);
+		HolmesResponse<GetsitesResponse> sitesInfo = profile.getSites();
 		GetsitesResponse sites = sitesInfo.getBody();
 		if (sites == null || sites.getSites().size() <= 0) {
 			System.out.println("getSites failed!");
@@ -74,7 +75,7 @@ public class BaseApiTest {
 		queryParam.setMax_results(10);
 		queryParam.setSort(Arrays.asList("pageviews desc"));
 		queryParam.setSiteid(sitesResponse.getSites().get(0).getSiteid());
-		HolmesResponse<QueryResponse> response = reportSvc.query(ucid, st, queryParam);
+		HolmesResponse<QueryResponse> response = report.query(queryParam);
 		
 		ResHeader header = response.getHeader();
 		QueryResponse queryRetData = response.getBody();
@@ -103,7 +104,7 @@ public class BaseApiTest {
 			System.out.println("[notice] sleep, wait for generating result");
 			Thread.sleep(5 * 1000);
 		}
-		HolmesResponse<GetStatusResponse> response = reportSvc.getStatus(ucid, st, 
+		HolmesResponse<GetStatusResponse> response = report.getStatus(
 				new GetStatusParameter(queryResponse.getBody().getQuery().getResult_id()));
 		GetStatusResponse retData = response.getBody();
 		if (retData == null) {

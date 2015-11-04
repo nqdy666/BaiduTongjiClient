@@ -14,18 +14,22 @@ import com.baidu.statistics.dataapi.om.report.QueryTransParameter;
 import com.baidu.statistics.dataapi.om.report.QueryTransRequest;
 import com.baidu.statistics.dataapi.om.report.QueryTransResponse;
 
-public class ReportSvc {
-	
+public class Report extends Base {
+
+	public Report(Integer ucid, String st) {
+		super(ucid, st);
+	}
+
 	/**
 	 * query方法根据请求时提供的报告查询条件
+	 * 
 	 * @param ucid
 	 * @param st
 	 * @param param
 	 * @return
 	 * @throws Exception
 	 */
-	public HolmesResponse<QueryResponse> query(Integer ucid, String st, 
-			QueryParameter param) throws Exception {
+	public HolmesResponse<QueryResponse> query(QueryParameter param) throws Exception {
 		DataApiConnection conn = new DataApiConnection(ucid);
 		AuthHeader header = new AuthHeader(st);
 		QueryRequest body = new QueryRequest(param);
@@ -33,17 +37,17 @@ public class ReportSvc {
 		HolmesResponse<QueryResponse> holmesRs = conn.post(holmesRq, QueryResponse.class);
 		return holmesRs;
 	}
-	
+
 	/**
 	 * 使用query得到的result_id查询报告生成状态，当状态为已生成、可下载时，同时获得报告生成结果的下载地址。
+	 * 
 	 * @param ucid
 	 * @param st
 	 * @param param
 	 * @return
 	 * @throws Exception
 	 */
-	public HolmesResponse<GetStatusResponse> getStatus(Integer ucid, String st, 
-			GetStatusParameter param) throws Exception {
+	public HolmesResponse<GetStatusResponse> getStatus(GetStatusParameter param) throws Exception {
 		DataApiConnection conn = new DataApiConnection(ucid);
 		AuthHeader header = new AuthHeader(st);
 		GetStatusRequest body = new GetStatusRequest(param);
@@ -51,7 +55,7 @@ public class ReportSvc {
 		HolmesResponse<GetStatusResponse> holmesRs = conn.post(holmesRq, GetStatusResponse.class);
 		return holmesRs;
 	}
-	
+
 	/**
 	 * 
 	 * @param ucid
@@ -60,8 +64,7 @@ public class ReportSvc {
 	 * @return
 	 * @throws Exception
 	 */
-	public HolmesResponse<QueryTransResponse> queryTrans(Integer ucid, String st,
-			QueryTransParameter param) throws Exception {
+	public HolmesResponse<QueryTransResponse> queryTrans(QueryTransParameter param) throws Exception {
 		DataApiConnection conn = new DataApiConnection(ucid);
 		AuthHeader header = new AuthHeader(st);
 		QueryTransRequest body = new QueryTransRequest(param);
@@ -69,5 +72,5 @@ public class ReportSvc {
 		HolmesResponse<QueryTransResponse> holmesRs = conn.post(holmesRq, QueryTransResponse.class);
 		return holmesRs;
 	}
-	
+
 }

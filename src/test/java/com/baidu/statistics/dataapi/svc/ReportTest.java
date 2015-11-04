@@ -21,7 +21,7 @@ import com.baidu.statistics.dataapi.om.report.QueryResponse;
 import com.baidu.statistics.dataapi.om.report.QueryTransParameter;
 import com.baidu.statistics.dataapi.om.report.QueryTransResponse;
 
-public class ReportSvcTest extends BaseApiTest {
+public class ReportTest extends BaseApiTest {
 
 	@Test
 	public void testQuery() throws Exception {
@@ -79,7 +79,7 @@ public class ReportSvcTest extends BaseApiTest {
 		} else if ("url".equals(config.getString(Config.K_QUERY_TRANS_TYPE))) {
 			param.setUrl(config.getString(Config.K_TRANS_URL));
 		}
-		HolmesResponse<QueryTransResponse> response = reportSvc.queryTrans(ucid, st, param);
+		HolmesResponse<QueryTransResponse> response = report.queryTrans(param);
 		System.out.println(JSON.toJSONString(response));
 	}
 
