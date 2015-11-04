@@ -1,6 +1,6 @@
 package com.baidu.statistics.dataapi.core;
 
-public class HolmesResponse<T> {
+public class HolmesResponse<T extends ApiResponse> {
 	/**
 	 * 响应头
 	 */

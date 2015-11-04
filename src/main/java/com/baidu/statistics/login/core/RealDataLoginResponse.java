@@ -1,5 +1,5 @@
 package com.baidu.statistics.login.core;
 
-public class RealDataLoginResponse {
+public abstract class RealDataLoginResponse {
 
 }

@@ -2,7 +2,7 @@ package com.baidu.statistics.login.core;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
-public class RealDataLoginRequest {
+public abstract class RealDataLoginRequest {
 	
 	@JSONField(serialize=false)
 	protected String functionName;
